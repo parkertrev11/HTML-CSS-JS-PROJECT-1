@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript Command Center</title>
+
+  <!--
+  ==================================================================
+  JAVASCRIPT COMMAND CENTER — UPPERCLASSMEN
+  ==================================================================
+
+  USE NOTEPAD + W3SCHOOLS TRYIT
+  1. Open this starter file in Notepad.
+  2. File > Save As > type index.html.
+  3. Set “Save as type” to All Files and encoding to UTF-8. Click Save.
+  4. Keep Notepad open. It is your saved master copy.
+  5. In Chrome, open:
+     https://www.w3schools.com/html/tryit.asp?filename=tryhtml_default
+  6. Click the LEFT code window. Press Ctrl + A, then Backspace.
+  7. In Notepad, press Ctrl + A and Ctrl + C. Paste the complete file
+     into the LEFT Tryit window with Ctrl + V.
+  8. Click Run. The interactive app appears on the RIGHT.
+  9. Complete ONE numbered change in Notepad and press Ctrl + S.
+  10. Copy the complete Notepad file, replace everything in the LEFT
+      Tryit window, and click Run again.
+  11. Repeat Step 10 after each change. Never edit the RIGHT preview.
+
+  WHAT YOU ARE LEARNING
+  • Variables store information that can change.
+  • Strings are text inside quotation marks.
+  • Numbers do not use quotation marks.
+  • Booleans are true/false switches and do not use quotation marks.
+  • Arrays store a list inside [square brackets].
+  • Objects group labeled values inside {curly braces}.
+  • Functions are reusable instructions.
+  • Events run a function after a click, keypress, or other action.
+  • DOM code changes what the browser displays.
+
+  Your finished site will be an interactive CRM, blog studio, sports
+  hub, event planner, inventory system, or task manager. It includes
+  live navigation, filtering, sorting, a goal counter, notifications,
+  theme switching, a command palette, and a working data board. You will
+  complete 17 guided changes, including five advanced behavior choices.
+  ==================================================================
+  -->
+
+  <style>
+    :root { --accent:#8b5cf6; --glow:#22d3ee; --bg:#050914; --surface:#0d1526; --surface2:#121e34; --text:#f4f7ff; --muted:#91a0ba; --line:rgba(255,255,255,.1); }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; color:var(--text); background:radial-gradient(circle at 90% 4%,color-mix(in srgb,var(--accent) 22%,transparent),transparent 28%),radial-gradient(circle at 15% 100%,color-mix(in srgb,var(--glow) 12%,transparent),transparent 30%),var(--bg); font-family:Segoe UI,Arial,sans-serif; }
+    button,input,select { font:inherit; }
+    button { cursor:pointer; }
+    .diagnostic { position:sticky; top:0; z-index:50; display:flex; gap:16px; flex-wrap:wrap; padding:8px 18px; background:#46131a; border-bottom:1px solid #fb7185; font-size:12px; }
+    .diagnostic.good { background:#063c2b; border-color:#34d399; }
+    .diagnostic.warn { background:#493207; border-color:#fbbf24; }
+    .app { display:grid; grid-template-columns:78px minmax(0,1fr); min-height:calc(100vh - 34px); }
+    aside { display:flex; flex-direction:column; align-items:center; gap:13px; padding:18px 12px; border-right:1px solid var(--line); background:rgba(5,9,20,.76); backdrop-filter:blur(18px); }
+    .logo { display:grid; place-items:center; width:47px; height:47px; margin-bottom:12px; border-radius:15px; background:linear-gradient(135deg,var(--accent),var(--glow)); box-shadow:0 12px 30px color-mix(in srgb,var(--accent) 35%,transparent); font-size:21px; }
+    .nav { width:46px; height:46px; border:0; border-radius:13px; color:var(--muted); background:transparent; font-size:19px; }
+    .nav:hover,.nav.active { color:white; background:color-mix(in srgb,var(--accent) 22%,transparent); }
+    .nav:last-of-type { margin-top:auto; }
+    main { min-width:0; padding:25px clamp(16px,3vw,38px) 40px; }
+    header,.row,.section-head,.modal-head { display:flex; align-items:center; justify-content:space-between; gap:14px; }
+    .overline { margin:0 0 6px; color:var(--glow); font-size:11px; font-weight:800; letter-spacing:.15em; text-transform:uppercase; }
+    h1 { margin:0; font-size:clamp(26px,4vw,43px); }
+    h2,h3,p { margin-top:0; }
+    .muted { color:var(--muted); }
+    .actions,.filters { display:flex; gap:9px; flex-wrap:wrap; }
+    .button,.select,.search { padding:10px 13px; border:1px solid var(--line); border-radius:11px; color:var(--text); background:rgba(255,255,255,.06); }
+    .button.primary { border:0; background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 62%,white)); box-shadow:0 10px 28px color-mix(in srgb,var(--accent) 30%,transparent); font-weight:750; }
+    .search { min-width:220px; outline:none; }
+    option { color:#111827; }
+    .hero { position:relative; overflow:hidden; margin:24px 0 15px; padding:26px; border:1px solid var(--line); border-radius:20px; background:linear-gradient(120deg,color-mix(in srgb,var(--accent) 20%,var(--surface2)),var(--surface)); }
+    .hero::after { content:""; position:absolute; width:190px; height:190px; right:-45px; top:-75px; border:35px solid color-mix(in srgb,var(--glow) 16%,transparent); border-radius:50%; }
+    .hero p { max-width:680px; margin:10px 0 0; color:var(--muted); }
+    .kpis { display:grid; grid-template-columns:repeat(4,minmax(140px,1fr)); gap:13px; }
+    .card,.panel { padding:18px; border:1px solid var(--line); border-radius:16px; background:rgba(13,21,38,.8); box-shadow:0 18px 45px rgba(0,0,0,.18); }
+    .kpi { margin:7px 0 2px; font-size:31px; font-weight:850; }
+    .positive { color:#6ee7b7; font-size:12px; }
+    .workspace { display:grid; grid-template-columns:minmax(0,1.65fr) minmax(250px,.75fr); gap:13px; margin-top:13px; }
+    .progress { height:9px; overflow:hidden; border-radius:999px; background:rgba(255,255,255,.07); }
+    .progress span { display:block; height:100%; width:0; border-radius:inherit; background:linear-gradient(90deg,var(--accent),var(--glow)); transition:width .55s ease; }
+    .board { display:grid; grid-template-columns:repeat(3,minmax(180px,1fr)); gap:11px; margin-top:15px; overflow-x:auto; }
+    .column { min-width:180px; padding:12px; border-radius:14px; background:rgba(255,255,255,.035); }
+    .column-title { display:flex; justify-content:space-between; margin-bottom:11px; color:var(--muted); font-size:12px; font-weight:800; text-transform:uppercase; }
+    .item { margin:8px 0; padding:13px; border:1px solid var(--line); border-radius:11px; background:var(--surface2); transition:.2s; }
+    .item:hover { transform:translateY(-2px); border-color:color-mix(in srgb,var(--accent) 60%,white); }
+    .tag { display:inline-block; margin-top:9px; padding:5px 8px; border-radius:999px; color:#c8fff1; background:rgba(52,211,153,.12); font-size:10px; }
+    .feed { list-style:none; margin:0; padding:0; }
+    .feed li { padding:12px 0; border-bottom:1px solid var(--line); color:var(--muted); font-size:13px; }
+    .view { display:none; }
+    .view.active { display:block; animation:appear .3s ease; }
+    @keyframes appear { from { opacity:0; transform:translateY(7px); } }
+    .data-table { width:100%; border-collapse:collapse; }
+    .data-table th,.data-table td { padding:13px; border-bottom:1px solid var(--line); text-align:left; }
+    .data-table th { color:var(--muted); font-size:11px; text-transform:uppercase; }
+    .toast { position:fixed; z-index:60; right:22px; bottom:22px; max-width:340px; padding:15px 18px; border:1px solid var(--accent); border-radius:13px; background:var(--surface2); box-shadow:0 20px 50px rgba(0,0,0,.4); transform:translateY(150%); transition:.3s; }
+    .toast.show { transform:translateY(0); }
+    dialog { width:min(500px,92vw); padding:22px; border:1px solid var(--line); border-radius:18px; color:var(--text); background:var(--surface); }
+    dialog::backdrop { background:rgba(0,0,0,.75); backdrop-filter:blur(5px); }
+    dialog input { width:100%; margin:9px 0 15px; padding:12px; border:1px solid var(--line); border-radius:10px; color:white; background:rgba(255,255,255,.07); }
+    .command-list button { width:100%; margin:5px 0; padding:12px; border:1px solid var(--line); border-radius:10px; color:var(--text); background:rgba(255,255,255,.05); text-align:left; }
+    body.light { --bg:#eef3fb; --surface:#ffffff; --surface2:#f7f9fe; --text:#172033; --muted:#5f6f86; --line:rgba(23,32,51,.12); }
+    body.light aside { background:rgba(255,255,255,.8); }
+    @media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}.workspace{grid-template-columns:1fr}.board{grid-template-columns:repeat(3,220px)}}
+    @media(max-width:600px){.app{grid-template-columns:1fr}aside{position:sticky;top:34px;z-index:30;flex-direction:row;padding:8px;border-right:0;border-bottom:1px solid var(--line)}.logo{width:40px;height:40px;margin:0 auto 0 0}.nav:last-of-type{margin:0}.actions{margin-top:14px}header{align-items:flex-start;flex-direction:column}.kpis{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+  <div id="diagnostic" class="diagnostic">
+    <span id="browserCheck">🔴 JavaScript has not started.</span>
+    <span id="codeCheck">Project code: waiting</span>
+    <span>File version: JS-UPPER-0825</span>
+  </div>
+  <noscript>
+    <style>
+      .javascript-blocked-screen {
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        color: white;
+        background: rgba(6, 20, 45, .97);
+        font-family: Segoe UI, Arial, sans-serif;
+      }
+      .javascript-blocked-box {
+        width: min(680px, 94vw);
+        padding: 32px;
+        border: 4px solid #fbbf24;
+        border-radius: 20px;
+        background: #123263;
+        box-shadow: 0 28px 80px rgba(0, 0, 0, .65);
+        text-align: center;
+      }
+      .javascript-blocked-box h1 { margin: 0 0 14px; font-size: clamp(28px, 6vw, 48px); }
+      .javascript-blocked-box p { margin: 10px 0; font-size: 18px; line-height: 1.55; }
+      .javascript-blocked-box .student-action { margin-top: 20px; padding: 15px; border-radius: 12px; color: #172554; background: #fde68a; font-weight: 800; }
+    </style>
+    <div class="javascript-blocked-screen">
+      <div class="javascript-blocked-box">
+        <div style="font-size:60px">🤔</div>
+        <h1>JAVASCRIPT ACCESS IS UNAVAILABLE</h1>
+        <p><strong>Your work is safe, and you did nothing wrong.</strong></p>
+        <p>This school device or browser is not currently allowing JavaScript to run on this page. JavaScript is the skill used in today's computer science lesson, so the interactive parts of your project cannot begin.</p>
+        <div class="student-action">Please show your teacher and ask: “Why isn't JavaScript available for our computer science project?”</div>
+        <p style="margin-top:16px;font-size:14px">File version: JS-UPPER-0825</p>
+      </div>
+    </div>
+  </noscript>
+  <script>
+    document.getElementById("browserCheck").textContent="🟢 Browser allows JavaScript.";
+    document.getElementById("diagnostic").className="diagnostic warn";
+    window.addEventListener("error",event=>{
+      document.getElementById("codeCheck").textContent="❌ Error near line "+(event.lineno||"?")+": "+event.message;
+      document.getElementById("diagnostic").className="diagnostic";
+    });
+  </script>
+
+  <div class="app">
+    <aside>
+      <div class="logo" id="logo">JS</div>
+      <button class="nav active" data-view="dashboard" title="Dashboard">▦</button>
+      <button class="nav" data-view="database" title="Database">☷</button>
+      <button class="nav" data-view="insights" title="Insights">⌁</button>
+      <button class="nav" id="themeButton" title="Theme">◐</button>
+    </aside>
+    <main>
+      <header>
+        <div><p class="overline" id="appLabel">APP TYPE</p><h1 id="brandTitle">Command Center</h1></div>
+        <div class="actions"><button class="button" id="commandButton">⌘ Commands</button><button class="button primary" id="quickAction">+ Add record</button></div>
+      </header>
+
+      <section class="view active" id="dashboard">
+        <div class="hero"><p class="overline">REAL-TIME WORKSPACE</p><h2 id="welcome">Welcome back.</h2><p id="tagline">Everything is ready.</p></div>
+        <div class="kpis" id="kpis"></div>
+        <div class="workspace">
+          <div class="panel">
+            <div class="section-head"><div><p class="overline">WORKFLOW</p><h3 id="boardTitle">Active board</h3></div><span class="tag" id="goalLabel">Goal</span></div>
+            <div class="progress"><span id="goalBar"></span></div>
+            <div class="board" id="board"></div>
+          </div>
+          <div class="panel"><p class="overline">ACTIVITY STREAM</p><h3>Latest updates</h3><ul class="feed" id="feed"></ul></div>
+        </div>
+      </section>
+
+      <section class="view" id="database">
+        <div class="section-head"><div><p class="overline">SEARCHABLE DATABASE</p><h2 id="databaseTitle">All records</h2></div><span class="tag" id="resultCount">0 results</span></div>
+        <div class="filters"><input class="search" id="search" placeholder="Search records..."><select class="select" id="statusFilter"><option value="all">All statuses</option><option value="planned">Planned</option><option value="active">Active</option><option value="complete">Complete</option></select><select class="select" id="sort"><option value="newest">Newest first</option><option value="name">Name A–Z</option><option value="status">Group by status</option></select></div>
+        <div class="panel" style="margin-top:14px;overflow-x:auto"><table class="data-table"><thead><tr><th>Name</th><th>Status</th><th>Priority</th><th>Owner</th></tr></thead><tbody id="tableBody"></tbody></table></div>
+      </section>
+
+      <section class="view" id="insights"><div class="panel"><p class="overline">LIVE INSIGHT</p><h2>Your JavaScript is calculating this</h2><p class="muted" id="insightText"></p><div class="kpi" id="completionRate">0%</div><div class="progress"><span id="insightBar"></span></div></div></section>
+    </main>
+  </div>
+
+  <dialog id="addDialog"><div class="modal-head"><div><p class="overline">CREATE</p><h2 id="dialogTitle">New record</h2></div><button class="button" data-close="addDialog">✕</button></div><label for="recordName">Record name</label><input id="recordName" placeholder="Type a name"><label for="recordPriority">Priority</label><select class="select" id="recordPriority"><option>High</option><option selected>Medium</option><option>Low</option></select><button class="button primary" id="saveButton">Save record</button></dialog>
+  <dialog id="commandDialog"><div class="modal-head"><div><p class="overline">COMMAND PALETTE</p><h2>Choose an action</h2></div><button class="button" data-close="commandDialog">✕</button></div><div class="command-list"><button data-command="theme">◐ Switch color mode</button><button data-command="add">＋ Create a record</button><button data-command="complete">✓ Complete an active record</button><button data-command="database">☷ Open the database</button></div></dialog>
+  <div class="toast" id="toast">Action complete.</div>
+
+  <script>
+    "use strict";
+
+    /*
+    ==================================================================
+    EDITING ZONE — COMPLETE CHANGES 1–12
+    Each change explains the data type, valid choices, and visible result.
+    Keep all punctuation that you are not specifically told to change.
+    ==================================================================
+    */
+
+    // ========== CHANGE 1: APP TYPE (STRING) ==========
+    // A string is text inside quotation marks.
+    // Type exactly one: "crm", "blog", "sports", "events", "inventory", "tasks"
+    // RESULT: changes the vocabulary, sample data, icon, dashboard labels, and goal.
+    const selectedApp = "crm";
+
+    // ========== CHANGE 2: CREATOR NAME (STRING) ==========
+    // Change only the text inside the quotes. It appears in the greeting.
+    const creatorName = "Your Name";
+
+    // ========== CHANGE 3: BRAND NAME (STRING) ==========
+    // This becomes the main title. Examples: "Northstar CRM", "Courtside HQ"
+    const brandName = "My Command Center";
+
+    // ========== CHANGE 4: ACCENT COLOR (STRING) ==========
+    // A hex color begins with # and contains six digits/letters.
+    // Violet #8b5cf6 | Blue #2563eb | Pink #db2777 | Green #059669
+    // Orange #ea580c | Red #dc2626 | Cyan #0891b2 | Gold #ca8a04
+    const accentColor = "#8b5cf6";
+
+    // ========== CHANGE 5: GLOW COLOR (STRING) ==========
+    // Choose a second hex color. It controls highlights and gradients.
+    const glowColor = "#22d3ee";
+
+    // ========== CHANGE 6: GOAL (NUMBER) ==========
+    // Numbers have NO quotation marks. Choose a goal from 5 to 100.
+    // RESULT: changes the progress bar calculation and goal label.
+    const weeklyGoal = 20;
+
+    // ========== CHANGE 7: STARTING VIEW (STRING) ==========
+    // "dashboard" shows the board; "database" shows the table;
+    // "insights" shows the calculated completion percentage.
+    const startingView = "dashboard";
+
+    // ========== CHANGE 8: COLOR MODE (BOOLEAN) ==========
+    // A Boolean is a true/false switch. Do NOT use quotation marks.
+    // true starts in light mode. false starts in dark mode.
+    const startInLightMode = false;
+
+    // ========== CHANGE 9: DEFAULT SORT (STRING) ==========
+    // "newest" keeps newest records first.
+    // "name" sorts alphabetically. "status" groups matching statuses.
+    const defaultSort = "newest";
+
+    // ========== CHANGE 10: SUCCESS MESSAGE (STRING) ==========
+    // This appears in the toast after the user saves a record.
+    const successMessage = "Record launched successfully!";
+
+    // ========== CHANGE 11: CLICK EFFECT (STRING) ==========
+    // "celebrate" creates confetti dots.
+    // "focus" automatically opens the database.
+    // "notify" displays an extra message.
+    const clickEffect = "celebrate";
+
+    // ========== CHANGE 12: TEAM MEMBERS (ARRAY) ==========
+    // An array is a list inside [ ]. Keep quotes around every name and commas between names.
+    // Change the names, but keep at least three names in the list.
+    const teamMembers = ["Alex", "Jordan", "Casey", "Morgan"];
+
+    // ========== CHANGE 13: SEARCH BEHAVIOR (STRING) ==========
+    // "contains" matches the search anywhere in a record name.
+    // "starts" matches only the beginning. "exact" requires the complete name.
+    // RESULT: changes the logic used by the live database search field.
+    const searchBehavior = "contains";
+
+    // ========== CHANGE 14: NEW RECORD STATUS (STRING) ==========
+    // "planned" sends new records to the first board column.
+    // "active" sends them to the middle. "complete" sends them to the last.
+    const newRecordStatus = "planned";
+
+    // ========== CHANGE 15: AUTOMATIC OWNER MODE (STRING) ==========
+    // "first" always selects the first person in teamMembers.
+    // "rotate" takes turns through the array. "random" chooses randomly.
+    const ownerMode = "rotate";
+
+    // ========== CHANGE 16: DUPLICATE POLICY (STRING) ==========
+    // "allow" permits two records with the same name.
+    // "prevent" refuses a duplicate and explains why in a toast message.
+    const duplicatePolicy = "prevent";
+
+    // ========== CHANGE 17: COMMAND COMPLETION RULE (STRING) ==========
+    // This controls “Complete an active record” in the command palette.
+    // "first" completes the first active record in the data.
+    // "highest" completes the highest-priority active record.
+    // "random" chooses any active record.
+    const completionRule = "highest";
+
+    /* =================================================================
+       END OF EDITING ZONE
+       The program below uses your values. Follow the numbered data flow:
+       1. Select a preset. 2. Build records. 3. Render the DOM.
+       4. Listen for events. 5. Update data and render again.
+       ================================================================= */
+
+    const PRESETS = {
+      crm:{label:"CUSTOMER RELATIONSHIP MANAGER",icon:"🤝",tagline:"Move relationships from first conversation to loyal customer.",word:"contact",board:"Relationship pipeline",goal:"contacts",metrics:["Contacts","Active Leads","Follow-ups","Won"],records:["Avery Stone","Bluebird Bakery","Jordan Lee","Vertex Design","Sam Rivera","Northside Studio"]},
+      blog:{label:"CREATOR BLOG STUDIO",icon:"✍️",tagline:"Develop ideas, publish standout stories, and grow your audience.",word:"post",board:"Publishing pipeline",goal:"posts",metrics:["Posts","Drafts","Comments","Subscribers"],records:["The future of gaming","Five study tips","Creator interview","Weekend photo story","Tech explained","Behind the scenes"]},
+      sports:{label:"SPORTS TEAM HUB",icon:"🏆",tagline:"Coordinate the roster, prepare for game day, and track momentum.",word:"player",board:"Team development",goal:"wins",metrics:["Players","Practices","Games","Wins"],records:["Avery Johnson","Jordan Chen","Casey Brooks","Morgan Patel","Riley Smith","Cameron Lee"]},
+      events:{label:"EVENT OPERATIONS",icon:"🎟️",tagline:"Bring guests, tasks, vendors, and deadlines into one control room.",word:"guest",board:"Event readiness",goal:"tasks",metrics:["Guests","Tasks","Vendors","Days Left"],records:["Morgan Family","Skyline Catering","DJ Nova","Photo Team","Taylor Guest","Stage Crew"]},
+      inventory:{label:"INVENTORY INTELLIGENCE",icon:"📦",tagline:"Track products, flag low stock, and keep every order moving.",word:"product",board:"Stock workflow",goal:"orders",metrics:["Products","Low Stock","Orders","Categories"],records:["Studio Headphones","Wireless Mouse","USB-C Hub","Webcam Pro","Mechanical Keyboard","Desk Light"]},
+      tasks:{label:"PRODUCTIVITY SYSTEM",icon:"✅",tagline:"Turn ambitious goals into visible progress, one action at a time.",word:"task",board:"Mission board",goal:"tasks",metrics:["Tasks","In Progress","Complete","Day Streak"],records:["Design homepage","Write project notes","Test interactions","Prepare demo","Check accessibility","Present app"]}
+    };
+
+    try {
+      // 1. SELECT A PRESET: bracket notation looks up the object named by selectedApp.
+      const app = PRESETS[selectedApp] || PRESETS.crm;
+      const statuses = ["planned","active","complete"];
+      let records = app.records.map((name,index)=>({id:Date.now()+index,name,status:statuses[index%3],priority:["High","Medium","Low"][index%3],owner:teamMembers[index%teamMembers.length]}));
+      let feed = ["Workspace initialized","Database connected","Event listeners ready"];
+
+      document.documentElement.style.setProperty("--accent",accentColor);
+      document.documentElement.style.setProperty("--glow",glowColor);
+      document.body.classList.toggle("light",startInLightMode);
+      document.getElementById("logo").textContent=app.icon;
+      document.getElementById("appLabel").textContent=app.label;
+      document.getElementById("brandTitle").textContent=brandName;
+      document.getElementById("welcome").textContent="Welcome back, "+creatorName+".";
+      document.getElementById("tagline").textContent=app.tagline;
+      document.getElementById("boardTitle").textContent=app.board;
+      document.getElementById("databaseTitle").textContent="All "+app.word+" records";
+      document.getElementById("dialogTitle").textContent="Create a new "+app.word;
+      document.getElementById("quickAction").textContent="+ Add "+app.word;
+      document.getElementById("sort").value=defaultSort;
+
+      // 2. RENDER FUNCTIONS convert JavaScript data into visible HTML.
+      function renderKPIs(){
+        const complete=records.filter(record=>record.status==="complete").length;
+        const values=[records.length,records.filter(record=>record.status==="active").length,records.filter(record=>record.status==="planned").length,complete];
+        document.getElementById("kpis").innerHTML=app.metrics.map((label,index)=>`<article class="card"><span class="muted">${label}</span><div class="kpi">${values[index]}</div><span class="positive">↗ Live calculation</span></article>`).join("");
+      }
+
+      function renderBoard(){
+        document.getElementById("board").innerHTML=statuses.map(status=>{const matching=records.filter(record=>record.status===status);return `<div class="column"><div class="column-title"><span>${status}</span><span>${matching.length}</span></div>${matching.map(record=>`<article class="item"><strong>${record.name}</strong><div class="tag">${record.priority} · ${record.owner}</div></article>`).join("")||`<p class="muted">Nothing here yet.</p>`}</div>`}).join("");
+        const completed=records.filter(record=>record.status==="complete").length;
+        const percent=Math.min(100,Math.round(completed/weeklyGoal*100));
+        document.getElementById("goalBar").style.width=percent+"%";
+        document.getElementById("goalLabel").textContent=completed+" / "+weeklyGoal+" "+app.goal;
+      }
+
+      function filteredRecords(){
+        const query=document.getElementById("search").value.toLowerCase();
+        const status=document.getElementById("statusFilter").value;
+        const sort=document.getElementById("sort").value;
+        const list=records.filter(record=>{
+          const name=record.name.toLowerCase();
+          let searchMatches=name.includes(query);
+          if(searchBehavior==="starts") searchMatches=name.startsWith(query);
+          if(searchBehavior==="exact") searchMatches=!query||name===query;
+          return searchMatches&&(status==="all"||record.status===status);
+        });
+        if(sort==="name") list.sort((a,b)=>a.name.localeCompare(b.name));
+        if(sort==="status") list.sort((a,b)=>a.status.localeCompare(b.status));
+        return list;
+      }
+
+      function renderTable(){
+        const list=filteredRecords();
+        document.getElementById("tableBody").innerHTML=list.map(record=>`<tr><td><strong>${record.name}</strong></td><td><span class="tag">${record.status}</span></td><td>${record.priority}</td><td>${record.owner}</td></tr>`).join("")||`<tr><td colspan="4">No matching records.</td></tr>`;
+        document.getElementById("resultCount").textContent=list.length+" result"+(list.length===1?"":"s");
+      }
+
+      function renderInsights(){
+        const complete=records.filter(record=>record.status==="complete").length;
+        const rate=records.length?Math.round(complete/records.length*100):0;
+        document.getElementById("completionRate").textContent=rate+"% complete";
+        document.getElementById("insightBar").style.width=rate+"%";
+        document.getElementById("insightText").textContent=`${complete} of ${records.length} ${app.word} records are complete. This percentage updates whenever the data changes.`;
+      }
+
+      function renderFeed(){document.getElementById("feed").innerHTML=feed.slice(0,6).map((entry,index)=>`<li><strong>${index?index+" min":"Now"}</strong><br>${entry}</li>`).join("");}
+      function renderAll(){renderKPIs();renderBoard();renderTable();renderInsights();renderFeed();}
+      function toast(message){const element=document.getElementById("toast");element.textContent=message;element.classList.add("show");setTimeout(()=>element.classList.remove("show"),2400);}
+      function chooseOwner(){
+        if(!teamMembers.length) return creatorName;
+        if(ownerMode==="random") return teamMembers[Math.floor(Math.random()*teamMembers.length)];
+        if(ownerMode==="rotate") return teamMembers[records.length%teamMembers.length];
+        return teamMembers[0];
+      }
+      function chooseRecordToComplete(){
+        const activeRecords=records.filter(record=>record.status==="active");
+        if(!activeRecords.length) return null;
+        if(completionRule==="random") return activeRecords[Math.floor(Math.random()*activeRecords.length)];
+        if(completionRule==="highest") {
+          const priorityRank={High:1,Medium:2,Low:3};
+          return activeRecords.sort((a,b)=>priorityRank[a.priority]-priorityRank[b.priority])[0];
+        }
+        return activeRecords[0];
+      }
+
+      // 3. EVENTS connect user actions to functions.
+      function openView(id){document.querySelectorAll(".view,.nav").forEach(element=>element.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelector(`.nav[data-view="${id}"]`)?.classList.add("active");}
+      document.querySelectorAll(".nav[data-view]").forEach(button=>button.addEventListener("click",()=>openView(button.dataset.view)));
+      document.getElementById("themeButton").addEventListener("click",()=>{document.body.classList.toggle("light");feed.unshift("Color mode switched");renderFeed();toast("Theme updated.");});
+      document.getElementById("quickAction").addEventListener("click",()=>document.getElementById("addDialog").showModal());
+      document.getElementById("commandButton").addEventListener("click",()=>document.getElementById("commandDialog").showModal());
+      document.querySelectorAll("[data-close]").forEach(button=>button.addEventListener("click",()=>document.getElementById(button.dataset.close).close()));
+      ["search","statusFilter","sort"].forEach(id=>document.getElementById(id).addEventListener(id==="search"?"input":"change",renderTable));
+
+      document.getElementById("saveButton").addEventListener("click",()=>{
+        const input=document.getElementById("recordName");
+        if(!input.value.trim()){toast("Enter a record name first.");return;}
+        const duplicateExists=records.some(record=>record.name.toLowerCase()===input.value.trim().toLowerCase());
+        if(duplicatePolicy==="prevent"&&duplicateExists){toast("Duplicate prevented: that record already exists.");return;}
+        const safeStatus=statuses.includes(newRecordStatus)?newRecordStatus:"planned";
+        records.unshift({id:Date.now(),name:input.value.trim(),status:safeStatus,priority:document.getElementById("recordPriority").value,owner:chooseOwner()});
+        feed.unshift("Created "+input.value.trim()); input.value=""; document.getElementById("addDialog").close(); renderAll(); toast(successMessage);
+        if(clickEffect==="focus") openView("database");
+        if(clickEffect==="notify") setTimeout(()=>toast("Your dashboard data also updated."),900);
+        if(clickEffect==="celebrate") celebrate();
+      });
+
+      document.querySelectorAll("[data-command]").forEach(button=>button.addEventListener("click",()=>{
+        const command=button.dataset.command; document.getElementById("commandDialog").close();
+        if(command==="theme") document.getElementById("themeButton").click();
+        if(command==="add") document.getElementById("addDialog").showModal();
+        if(command==="database") openView("database");
+        if(command==="complete") {const record=chooseRecordToComplete();if(record){record.status="complete";feed.unshift("Completed "+record.name);renderAll();toast("Record completed using the "+completionRule+" rule.");}else toast("No active record found.");}
+      }));
+
+      function celebrate(){
+        for(let i=0;i<18;i++){const dot=document.createElement("span");dot.style.cssText=`position:fixed;z-index:80;left:${45+Math.random()*10}%;top:35%;width:8px;height:8px;border-radius:50%;background:${i%2?accentColor:glowColor};pointer-events:none;transition:1s`;document.body.appendChild(dot);requestAnimationFrame(()=>{dot.style.transform=`translate(${Math.random()*420-210}px,${Math.random()*360-100}px) rotate(300deg)`;dot.style.opacity="0"});setTimeout(()=>dot.remove(),1100);}
+      }
+
+      openView(["dashboard","database","insights"].includes(startingView)?startingView:"dashboard");
+      renderAll();
+      document.getElementById("codeCheck").textContent="✅ Project code loaded correctly.";
+      document.getElementById("diagnostic").className="diagnostic good";
+    } catch(error) {
+      document.getElementById("codeCheck").textContent="❌ Project error: "+error.message;
+      document.getElementById("diagnostic").className="diagnostic";
+    }
+  </script>
+</body>
+</html>
